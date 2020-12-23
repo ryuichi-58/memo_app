@@ -19,7 +19,12 @@
 <h2>Practice</h2>
 <pre>
 <?php
-
+try {
+$db = new PDO('mysql:dbname = mydb;host=127.0.0.1; port=8889; charset=utf8', 'root', 'root');
+} catch (PDOException $e) {
+    echo 'DB接続エラー：' . $e -> getMessage();
+}
+echo 'トップページです';
 ?>
 </pre>
 </main>
