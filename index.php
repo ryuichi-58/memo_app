@@ -8,7 +8,7 @@
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="css/style.css">
 
-<title>PHP</title>
+<title>index.php</title>
 </head>
 <body>
 <header>
@@ -16,17 +16,22 @@
 </header>
 
 <main>
-<h2>Practice</h2>
-<pre>
+<h2>MEMO</h2>
 <?php
 try {
-$db = new PDO('mysql:dbname = mydb;host=127.0.0.1; port=8889; charset=utf8', 'root', 'root');
+    $db = new PDO('mysql:dbname=mydb;host=127.0.0.1; port=8889; charset=utf8', 'root', 'root');
 } catch (PDOException $e) {
     echo 'DB接続エラー：' . $e -> getMessage();
 }
-echo 'トップページです';
+$memos = $db->query('SELECT * FROM memos ORDER BY id desc');
 ?>
-</pre>
+<article>
+<?php while ($memo = $memos->fetch()): ?>
+<p><a href="#"><?php print($memo['memo']); ?></a></p>
+<time><?php print($memo['created_at']); ?></time>
+<hr>
+<?php endwhile; ?>
+</article>
 </main>
 </body>
 </html>
