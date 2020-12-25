@@ -1,3 +1,4 @@
+<?php require('dbconnect.php'); ?>
 <!doctype html>
 <html lang="ja">
 <head>
@@ -18,16 +19,16 @@
 <main>
 <h2>MEMO</h2>
 <?php
-try {
-    $db = new PDO('mysql:dbname=mydb;host=127.0.0.1; port=8889; charset=utf8', 'root', 'root');
-} catch (PDOException $e) {
-    echo 'DB接続エラー：' . $e -> getMessage();
-}
 $memos = $db->query('SELECT * FROM memos ORDER BY id desc');
 ?>
 <article>
 <?php while ($memo = $memos->fetch()): ?>
-<p><a href="#"><?php print(mb_substr($memo['memo'], 0, 50)); ?></a></p>
+<p>
+    <a href="memo.php?id=<?php print($memo['id']); ?>">
+        <?php print(mb_substr($memo['memo'], 0, 50)); ?>
+        <?php print((mb_strlen($memo['memo']) > 50 ? '…' : '')); ?>
+    </a>
+</p>
 <time><?php print($memo['created_at']); ?></time>
 <hr>
 <?php endwhile; ?>
