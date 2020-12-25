@@ -19,7 +19,7 @@
 <main>
 <h2>MEMO</h2>
 <?php
-$memos = $db->query('SELECT * FROM memos ORDER BY id desc');
+$memos = $db->query('SELECT * FROM memos ORDER BY id lIMIT 0,5');
 ?>
 <article>
 <?php while ($memo = $memos->fetch()): ?>
