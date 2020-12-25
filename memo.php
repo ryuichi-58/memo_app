@@ -17,7 +17,6 @@
 
 <main>
 <h2>MEMO</h2>
-<pre>
 <?php
 try{
     $db = new PDO('mysql:dbname=mydb; host=127.0.0.1; port=8889; charset=utf8', 'root', 'root');
@@ -25,9 +24,15 @@ try{
 echo '接続エラー：' . $e->getMessage();
 }
 
-$memo = $db->query('select * from memos where id=1')
+$memos = $db->prepare('SELECT * FROM memos WHERE id=?');
+$memos->execute(array($_REQUEST['id']));
+$memo = $memos->fetch();
 ?>
-</pre>
+<article>
+    <pre><?php print($memo['memo']); ?></pre>
+
+    <a href="index.php">戻る</a>
+</article>
 </main>
 </body>
 </html>
