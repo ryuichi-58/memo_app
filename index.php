@@ -19,7 +19,15 @@
 <main>
 <h2>MEMO</h2>
 <?php
-$memos = $db->query('SELECT * FROM memos ORDER BY id lIMIT 0,5');
+if (isset($_REQUEST['page']) && is_numeric($_REQUEST['page'])) {
+    $page = $_REQUEST['page'];
+} else {
+    $page = 1;
+}
+$start = 5 * ($page - 1);
+$memos = $db->prepare('SELECT * FROM memos ORDER BY id lIMIT ?,5');
+$memos->bindParam(1, $page, PDO::PARAM_INT);
+$memos->execute();
 ?>
 <article>
 <?php while ($memo = $memos->fetch()): ?>
@@ -32,6 +40,8 @@ $memos = $db->query('SELECT * FROM memos ORDER BY id lIMIT 0,5');
 <time><?php print($memo['created_at']); ?></time>
 <hr>
 <?php endwhile; ?>
+<a href="index.php?page=<?php print($page-1); ?>"><?php print($page-1); ?>ページ目へ</a>|
+<a href="index.php?page=<?php print($page+1); ?>"><?php print($page+1); ?>ページ目へ</a>
 </article>
 </main>
 </body>
