@@ -26,7 +26,7 @@ if (isset($_REQUEST['page']) && is_numeric($_REQUEST['page'])) {
 }
 $start = 5 * ($page - 1);
 $memos = $db->prepare('SELECT * FROM memos ORDER BY id lIMIT ?,5');
-$memos->bindParam(1, $page, PDO::PARAM_INT);
+$memos->bindParam(1, $start, PDO::PARAM_INT);
 $memos->execute();
 ?>
 <article>
@@ -40,8 +40,18 @@ $memos->execute();
 <time><?php print($memo['created_at']); ?></time>
 <hr>
 <?php endwhile; ?>
-<a href="index.php?page=<?php print($page-1); ?>"><?php print($page-1); ?>ページ目へ</a>|
+<?php if($page >= 2): ?>
+<a href="index.php?page=<?php print($page-1); ?>"><?php print($page-1); ?>ページ目へ</a>
+<?php endif; ?>
+｜
+<?php
+$counts = $db->query('select count(*) as cnt from memos');
+$count = $counts->fetch();
+$max_page = ceil($count['cnt'] / 5);
+if($page < $max_page):
+?>
 <a href="index.php?page=<?php print($page+1); ?>"><?php print($page+1); ?>ページ目へ</a>
+<?php endif; ?>
 </article>
 </main>
 </body>
